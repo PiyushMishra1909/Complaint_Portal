@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Complaints</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary px-4">
+    <a class="navbar-brand" href="/">ComplaintPortal</a>
+    <div>
+        <span class="text-white me-3">👤 {{ session['user_name'] }}</span>
+        <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Complaints</h2>
+        <a href="/submit-complaint" class="btn btn-primary">+ New Complaint</a>
+    </div>
+
+    {% if complaints %}
+    <div class="card shadow">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for complaint in complaints %}
+                    <tr>
+                        <td>{{ complaint.title }}</td>
+                        <td>{{ complaint.category }}</td>
+                        <td>{{ complaint.location }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if complaint.status == 'Pending' %}bg-warning text-dark
+                                {% elif complaint.status == 'Assigned' %}bg-info
+                                {% elif complaint.status == 'In Progress' %}bg-primary
+                                {% elif complaint.status == 'Resolved' %}bg-success
+                                {% elif complaint.status == 'Closed' %}bg-secondary
+                                {% endif %}">
+                                {{ complaint.status }}
+                            </span>
+                        </td>
+                        <td>{{ complaint.created_at.strftime('%d %b %Y') }}</td>
+                        <td>
+                            {% if complaint.status == 'Resolved' %}
+                                <a href="/feedback/{{ complaint.id }}" class="btn btn-sm btn-success">Give Feedback</a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+        <div class="alert alert-info">You haven't submitted any complaints yet.</div>
+    {% endif %}
+
+    <a href="/student/dashboard" class="btn btn-outline-secondary mt-3">Back to Dashboard</a>
+</div>
+</body>
+</html>

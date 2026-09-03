@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Complaint</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-danger px-4">
+    <a class="navbar-brand" href="/">ComplaintPortal Admin</a>
+    <div>
+        <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">Complaint #{{ complaint.id }}</h4>
+                    <hr>
+                    <p><strong>Title:</strong> {{ complaint.title }}</p>
+                    <p><strong>Category:</strong> {{ complaint.category }}</p>
+                    <p><strong>Location:</strong> {{ complaint.location }}</p>
+                    <p><strong>Description:</strong> {{ complaint.description }}</p>
+                    <p><strong>Status:</strong> {{ complaint.status }}</p>
+                    <p><strong>Priority:</strong> {{ complaint.priority }}</p>
+                    {% if complaint.photo %}
+                        <p><strong>Photo:</strong></p>
+                        <img src="{{ url_for('static', filename='uploads/' + complaint.photo) }}" class="img-fluid rounded" style="max-width: 300px;">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Update Complaint</h4>
+                    <hr>
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Priority</label>
+                            <select name="priority" class="form-select">
+                                <option value="Low" {% if complaint.priority == 'Low' %}selected{% endif %}>Low</option>
+                                <option value="Normal" {% if complaint.priority == 'Normal' %}selected{% endif %}>Normal</option>
+                                <option value="High" {% if complaint.priority == 'High' %}selected{% endif %}>High</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="Pending" {% if complaint.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Assigned" {% if complaint.status == 'Assigned' %}selected{% endif %}>Assigned</option>
+                                <option value="In Progress" {% if complaint.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                <option value="Resolved" {% if complaint.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                <option value="Closed" {% if complaint.status == 'Closed' %}selected{% endif %}>Closed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Assign Worker</label>
+                            <select name="worker_id" class="form-select">
+                                <option value="">-- Unassigned --</option>
+                                {% for worker in workers %}
+                                <option value="{{ worker.id }}" {% if complaint.assigned_worker_id == worker.id %}selected{% endif %}>
+                                    {{ worker.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">Update Complaint</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="/admin/dashboard" class="btn btn-outline-secondary mt-3">Back to Dashboard</a>
+</div>
+</body>
+</html>

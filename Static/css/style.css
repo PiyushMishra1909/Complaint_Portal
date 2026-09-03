@@ -1,0 +1,14 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.status-pending { color: #ffc107; font-weight: bold; }
+.status-assigned { color: #17a2b8; font-weight: bold; }
+.status-inprogress { color: #007bff; font-weight: bold; }
+.status-resolved { color: #28a745; font-weight: bold; }
+.status-closed { color: #6c757d; font-weight: bold; }

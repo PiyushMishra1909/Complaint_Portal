@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary px-4">
+    <a class="navbar-brand" href="/">ComplaintPortal</a>
+    <div>
+        <span class="text-white me-3">👤 {{ session['user_name'] }}</span>
+        <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Welcome, {{ session['user_name'] }}!</h2>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow h-100 text-center p-4">
+                <div class="card-body">
+                    <h1>📝</h1>
+                    <h5 class="card-title mt-2">Submit a Complaint</h5>
+                    <p class="text-muted">Report a new maintenance issue on campus.</p>
+                    <a href="/submit-complaint" class="btn btn-primary">Submit Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow h-100 text-center p-4">
+                <div class="card-body">
+                    <h1>📋</h1>
+                    <h5 class="card-title mt-2">My Complaints</h5>
+                    <p class="text-muted">Track the status of your submitted complaints.</p>
+                    <a href="/my-complaints" class="btn btn-outline-primary">View Complaints</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
