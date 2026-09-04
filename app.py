@@ -3,7 +3,7 @@
 import os
 import webbrowser
 from threading import Timer
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
@@ -82,33 +82,44 @@ def login():
             session['user_id'] = user.id
             session['user_name'] = user.name
             session['user_role'] = user.role
+            flash('Login successful!', 'success')
             return redirect('/dashboard')
         else:
-            return "Invalid email or password. <a href='/login'>Try again</a>"
+            flash('Invalid email or password.', 'danger')
+            return render_template('login.html')
 
     return render_template('login.html')
-
 
 ## --------- Register Page--------##
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
 
-        hashed_password = bcrypt.generate_password_hash(
-            password).decode('utf-8')
+        # College email check
+        if not email.endswith('@acem.edu.in'):
+            return render_template('register.html', error='Only ACEM college email addresses (@acem.edu.in) are allowed.')
 
+        # Password length check
+        if len(password) < 8:
+            return render_template('register.html', error='Password must be at least 8 characters long.')
+
+        # Duplicate email check
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            return render_template('register.html', error='An account with this email already exists.')
+
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         new_user = User(name=name, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect('/')
+        return redirect('/login')
 
-    return render_template('register.html')
+    return render_template('register.html', error=None)
 
 ## -----------Dashboard-----------##
 
@@ -117,15 +128,15 @@ def register():
 def dashboard():
     if 'user_id' not in session:
         return redirect('/login')
-
+    
     role = session.get('user_role')
-
+    
     if role == 'admin':
         return redirect('/admin/dashboard')
     elif role == 'worker':
         return redirect('/worker/dashboard')
     else:
-        return redirect('/student/dashboard')
+        return redirect('/')
 
 ## ----------- StudentDashboard ----------##
 

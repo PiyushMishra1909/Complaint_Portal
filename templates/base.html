@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}ComplaintPortal{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark {% block navbar_color %}bg-primary{% endblock %} px-4">
+    <a class="navbar-brand fw-bold" href="/">
+        <i class="bi bi-tools"></i> ComplaintPortal
+    </a>
+
+    <div class="d-flex align-items-center ms-auto gap-3">
+        {% if session.get('user_role') == 'student' %}
+            <a class="nav-link text-white" href="/"><i class="bi bi-house"></i> Home</a>
+            <a class="nav-link text-white" href="/submit-complaint"><i class="bi bi-pencil-square"></i> Submit Complaint</a>
+            <a class="nav-link text-white" href="/my-complaints"><i class="bi bi-clipboard-check"></i> My Complaints</a>
+        {% elif session.get('user_role') == 'admin' %}
+            <a class="nav-link text-white" href="/admin/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        {% elif session.get('user_role') == 'worker' %}
+            <a class="nav-link text-white" href="/worker/dashboard"><i class="bi bi-tools"></i> My Tasks</a>
+        {% else %}
+            <a class="nav-link text-white" href="/"><i class="bi bi-house"></i> Home</a>
+        {% endif %}
+
+        {% if session.get('user_name') %}
+            <span class="text-white">
+                <i class="bi bi-person-circle"></i> {{ session['user_name'] }}
+                <span class="badge bg-light text-dark ms-1">{{ session['user_role'] }}</span>
+            </span>
+            <a href="/logout" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        {% else %}
+            <a href="/login" class="btn btn-light btn-sm">Login</a>
+            <a href="/register" class="btn btn-outline-light btn-sm">Register</a>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- Flash Messages -->
+<div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+{% block content %}{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
