@@ -1,14 +1,303 @@
-body {
-    background-color: #f8f9fa;
+/* =========================================================
+   ComplaintPortal — Work Order design system
+   ========================================================= */
+
+:root {
+  --ink: #1E2A32;
+  --ink-soft: #4B5A62;
+  --ink-faint: #7C8A90;
+
+  --paper: #F1F3F2;
+  --paper-raised: #FFFFFF;
+  --line: #D9DEDC;
+  --line-strong: #BFC7C4;
+
+  --amber: #E29332;
+  --amber-dark: #B5701C;
+  --teal: #2F6F6B;
+  --teal-dark: #1F4E4B;
+  --brick: #B23A2E;
+  --green: #3F8F5F;
+  --blue: #3B6FA0;
+  --grey: #7A7F82;
+
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-body: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius: 4px;
 }
 
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
 }
 
-.status-pending { color: #ffc107; font-weight: bold; }
-.status-assigned { color: #17a2b8; font-weight: bold; }
-.status-inprogress { color: #007bff; font-weight: bold; }
-.status-resolved { color: #28a745; font-weight: bold; }
-.status-closed { color: #6c757d; font-weight: bold; }
+h1, h2, h3, h4, h5, h6,
+.navbar-brand, .display-4, .display-5 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+a { color: var(--teal-dark); }
+a:hover { color: var(--teal); }
+
+/* ---------- Top nav ---------- */
+.portal-nav {
+  background: var(--ink);
+  padding: 0.85rem 1.5rem;
+}
+
+.portal-nav .navbar-brand {
+  color: var(--paper) !important;
+  font-weight: 700;
+  font-size: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.portal-nav .brand-mark {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--amber);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+.portal-nav .nav-link {
+  color: rgba(241, 243, 242, 0.78) !important;
+  font-size: 0.92rem;
+  padding: 0.4rem 0.7rem !important;
+}
+.portal-nav .nav-link:hover { color: #fff !important; }
+
+.portal-nav .role-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink);
+  background: var(--amber);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  text-transform: lowercase;
+}
+
+.portal-nav .user-name {
+  color: rgba(241, 243, 242, 0.9);
+  font-size: 0.9rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+
+.btn-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: #0f171c;
+  border-color: #0f171c;
+}
+
+.btn-accent {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--ink);
+  font-weight: 600;
+}
+.btn-accent:hover {
+  background: var(--amber-dark);
+  border-color: var(--amber-dark);
+  color: #fff;
+}
+
+.btn-outline-primary {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.btn-outline-primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.btn-teal { background: var(--teal); border-color: var(--teal); color: #fff; }
+.btn-teal:hover { background: var(--teal-dark); border-color: var(--teal-dark); color: #fff; }
+
+/* ---------- Form controls ---------- */
+.form-control, .form-select {
+  border-radius: var(--radius);
+  border-color: var(--line-strong);
+  background: var(--paper-raised);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(30, 42, 50, 0.12);
+}
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* ---------- Panels (auth forms, detail panels) ---------- */
+.panel {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* ---------- Ticket card (the signature element) ---------- */
+.ticket {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--grey);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.ticket-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  border-bottom: 1px dashed var(--line-strong);
+  background: #FAFBFA;
+}
+
+.ticket-body {
+  padding: 1rem;
+}
+
+.ticket-body h5 {
+  margin-bottom: 0.35rem;
+}
+
+/* status stub colors */
+.ticket.stub-pending      { border-left-color: var(--amber); }
+.ticket.stub-assigned     { border-left-color: var(--teal); }
+.ticket.stub-inprogress   { border-left-color: var(--blue); }
+.ticket.stub-resolved     { border-left-color: var(--green); }
+.ticket.stub-closed       { border-left-color: var(--grey); }
+
+/* ---------- Status / priority pills (outlined, never color-only) ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  background: transparent;
+  white-space: nowrap;
+}
+.tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.tag-pending      { color: var(--amber-dark); }
+.tag-assigned     { color: var(--teal-dark); }
+.tag-inprogress   { color: var(--blue); }
+.tag-resolved     { color: var(--green); }
+.tag-closed       { color: var(--grey); }
+.tag-high         { color: var(--brick); }
+.tag-normal       { color: var(--ink-soft); }
+.tag-low          { color: var(--teal); }
+
+/* ---------- Data table (admin / worker views) ---------- */
+.portal-table {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.portal-table table { margin-bottom: 0; }
+.portal-table thead {
+  background: var(--ink);
+}
+.portal-table thead th {
+  color: var(--paper);
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: none;
+  padding: 0.75rem 1rem;
+}
+.portal-table tbody td {
+  padding: 0.75rem 1rem;
+  font-size: 0.92rem;
+  vertical-align: middle;
+  border-color: var(--line);
+}
+.portal-table tbody tr:hover { background: #FAFBFA; }
+.ticket-id {
+  font-family: var(--font-mono);
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+/* ---------- Hero (logged-out home) ---------- */
+.hero {
+  padding: 4.5rem 0 3rem;
+}
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--amber-dark);
+  background: rgba(226, 147, 50, 0.12);
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+.hero h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  max-width: 20ch;
+}
+.hero p.lead {
+  max-width: 55ch;
+  color: var(--ink-soft);
+}
+
+/* ---------- Feature / action cards ---------- */
+.action-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  height: 100%;
+}
+.action-card .icon-mark {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--radius);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 0.9rem;
+  background: rgba(30, 42, 50, 0.06);
+  color: var(--ink);
+}
+
+/* ---------- Alerts ---------- */
+.alert { border-radius: var(--radius); border-width: 1px; }
+
+/* ---------- Star rating (feedback) ---------- */
+.star-select { font-size: 1rem; }
